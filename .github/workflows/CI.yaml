@@ -3,7 +3,8 @@ on:
   push:
     branches:
       - "main"
-
+  repository_dispatch:
+    types: gitops-analysis-base-trigger
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -38,3 +39,20 @@ jobs:
     #       repository: analysis-dask/usatlas
     #       event-type: gitops-analysis-base-trigger
     #       client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+
+
+    #   - name: Update Version In Checked-Out Code
+    #     if: ${{ github.event.client_payload.sha }}
+    #     run: |
+    #       sed -i "s@\(.*image:\).*@\1 docker.io/sandci/alarms_and_alerts:${{ github.event.client_payload.sha }}@" ${GITHUB_WORKSPACE}/atlas-analytics/crons/perfsonar/*.yaml
+    #   - name: Commit The New Image Reference
+    #     uses: stefanzweifel/git-auto-commit-action@v4.16.0
+    #     if: ${{ github.event.client_payload.sha }}
+    #     with:
+    #       commit_message: Deploy new AAAS PerfSONAR image ${{ github.event.client_payload.sha }}
+    #       branch: main
+    #       commit_options: "--no-verify --signoff"
+    #       repository: .
+    #       commit_user_name: AAAS GitOps Bot
+    #       commit_user_email: ilijav@gmail.com
+    #       commit_author: AAAS GitOps Bot <ilijav@gmail.com>
