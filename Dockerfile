@@ -2,6 +2,7 @@ FROM sslhep/analysis-dask-base:latest
 
 LABEL maintainer Ilija Vukotic <ivukotic@cern.ch>
 
+USER root
 
 RUN echo "Timestamp:" `date --utc` | tee /image-build-info.txt
 
