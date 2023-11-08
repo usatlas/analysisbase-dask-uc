@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v5.0.0
         with:
           context: .
-          file: docker/Dockerfile
+          file: Dockerfile
           push: true
           tags: sslhep/analysis-dask-uc:latest, sslhep/analysis-dask-uc:${{ github.sha }}
 
