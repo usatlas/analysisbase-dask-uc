@@ -24,7 +24,6 @@ jobs:
             hub.opensciencegrid.org/usatlas/analysis-dask-uc           
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=schedule
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=sha   

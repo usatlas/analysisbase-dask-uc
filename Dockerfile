@@ -21,4 +21,4 @@ RUN /venv/bin/jupyter server extension enable --py jupyterlab --sys-prefix
 
 RUN git clone https://github.com/ivukotic/ML_platform_tests.git
 
-CMD ["/.run.sh"]
+CMD ["/.run"]
