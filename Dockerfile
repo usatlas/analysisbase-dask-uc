@@ -10,7 +10,7 @@ RUN curl -OL https://raw.githubusercontent.com/maniaclab/ci-connect-api/master/r
 RUN chmod +x sync_users_debian.sh
 
 
-COPY run.sh         /.run.sh
+COPY run.sh         /.run
 
 RUN mkdir /workspace
 COPY private_jupyter_notebook_config.py /usr/local/etc/jupyter_notebook_config.py
