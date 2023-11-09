@@ -1,4 +1,4 @@
-FROM sslhep/analysis-dask-base:latest
+FROM sslhep/analysis-dask-base:main
 
 LABEL maintainer Ilija Vukotic <ivukotic@cern.ch>
 
@@ -17,7 +17,7 @@ COPY private_jupyter_notebook_config.py /usr/local/etc/jupyter_notebook_config.p
 
 RUN . /release_setup.sh
 
-RUN jupyter server extension enable --py jupyterlab --sys-prefix
+RUN /venv/bin/jupyter server extension enable --py jupyterlab --sys-prefix
 
 RUN git clone https://github.com/ivukotic/ML_platform_tests.git
 
