@@ -11,14 +11,7 @@ fi
 
 export SHELL=/bin/bash
 
-echo "======"
-ls
-
-echo "------"
-ls /
-
-echo "setting up user"
-echo "------"
+echo "------ setting up user"
 
 if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     PATH=$PATH:/usr/sbin
@@ -45,7 +38,8 @@ if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     # python3.8 -m pip --no-cache-dir install  root-pandas 
     
     # unset JUPYTER_PATH
-    # unset JUPYTER_CONFIG_DIR
+    which jupyter
+    unset JUPYTER_CONFIG_DIR
     cd /home/$OWNER
 
     # Invoke Jupyter lab as the user
