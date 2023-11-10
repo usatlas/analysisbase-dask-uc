@@ -1,7 +1,7 @@
 
-# With RISE, a Jupyter notebook extension, you can instantly turn your jupyter notebook into a live reveal.js-based presentation.
-jupyter-nbextension install rise --py --sys-prefix
-jupyter-nbextension enable rise --py --sys-prefix
+# # With RISE, a Jupyter notebook extension, you can instantly turn your jupyter notebook into a live reveal.js-based presentation.
+# jupyter-nbextension install rise --py --sys-prefix
+# jupyter-nbextension enable rise --py --sys-prefix
 
 if [ "$1" != "" ]; then
     echo "Git Repo $1 requested..."
@@ -11,7 +11,13 @@ fi
 
 export SHELL=/bin/bash
 
-# setting up users
+echo "======"
+ls
+
+echo "------"
+ls /
+
+echo "setting up users"
 if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     PATH=$PATH:/usr/sbin
     /sync_users_debian.sh -u root."$CONNECT_GROUP" -g root."$CONNECT_GROUP" -e https://api.ci-connect.net:18080
@@ -25,18 +31,19 @@ if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     chown -R $OWNER: /workspace
     # Change to the user's homedir
     cd /home/$OWNER
-    # get tutorial in.
-    cp -r /ML_platform_tests/tutorial ~/.
 
-    # setup ROOT
-    cd /opt/root/
-    source bin/thisroot.sh
-    cp -r $ROOTSYS/etc/notebook/kernels/root /usr/local/share/jupyter/kernels/
+    # # get tutorial in.
+    # cp -r /ML_platform_tests/tutorial ~/.
 
-    python3.8 -m pip --no-cache-dir install  root-pandas 
+    # # setup ROOT
+    # cd /opt/root/
+    # source bin/thisroot.sh
+    # cp -r $ROOTSYS/etc/notebook/kernels/root /usr/local/share/jupyter/kernels/
+
+    # python3.8 -m pip --no-cache-dir install  root-pandas 
     
-    unset JUPYTER_PATH
-    unset JUPYTER_CONFIG_DIR
+    # unset JUPYTER_PATH
+    # unset JUPYTER_CONFIG_DIR
     cd /home/$OWNER
 
     # Invoke Jupyter lab as the user

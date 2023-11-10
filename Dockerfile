@@ -15,8 +15,8 @@ RUN chmod +x sync_users_debian.sh
 COPY run.sh         /.run
 RUN chmod +x /.run
 
-COPY SetupPrivateJupyterLab.sh         /SetupPrivateJupyterLab.sh
-RUN chmod +x /SetupPrivateJupyterLab.sh
+COPY SetupPrivateJupyterLab.sh         /ML_platform_tests/SetupPrivateJupyterLab.sh
+RUN chmod +x /ML_platform_tests/SetupPrivateJupyterLab.sh
 
 RUN mkdir /workspace
 # Want this to go to $(jupyter --config-dir) which is /root/.jupyter for this container
@@ -26,7 +26,7 @@ COPY private_jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.p
 RUN . /release_setup.sh \
     && /venv/bin/jupyter server extension enable --py jupyterlab --sys-prefix
 
-RUN git clone https://github.com/ivukotic/ML_platform_tests.git /ML_platform_tests
+# RUN git clone https://github.com/ivukotic/ML_platform_tests.git /ML_platform_tests
 
 # Have Jupyter shell setup AnalysisBase environment by default
 RUN echo -e '\n# Activate AnalysisBase environment on login shell\n. /release_setup.sh\n' >> /root/.bash_profile
