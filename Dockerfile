@@ -26,7 +26,7 @@ COPY private_jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.p
 RUN . /release_setup.sh \
     && /venv/bin/jupyter server extension enable --py jupyterlab --sys-prefix
 
-RUN git clone https://github.com/ivukotic/ML_platform_tests.git /.
+RUN git clone https://github.com/ivukotic/ML_platform_tests.git /ML_platform_tests
 
 # Have Jupyter shell setup AnalysisBase environment by default
 RUN echo -e '\n# Activate AnalysisBase environment on login shell\n. /release_setup.sh\n' >> /root/.bash_profile
