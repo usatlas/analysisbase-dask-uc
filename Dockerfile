@@ -8,8 +8,8 @@ USER root
 
 RUN echo "Timestamp:" `date --utc` | tee /image-build-info.txt
 
-RUN curl -OL https://raw.githubusercontent.com/maniaclab/ci-connect-api/master/resources/provisioner/sync_users_debian.sh
-RUN chmod +x sync_users_debian.sh
+RUN curl -L https://raw.githubusercontent.com/maniaclab/ci-connect-api/master/resources/provisioner/sync_users_debian.sh --output /sync_users_debian.sh
+RUN chmod +x /sync_users_debian.sh
 
 
 COPY run.sh         /.run
