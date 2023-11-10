@@ -25,4 +25,7 @@ RUN . /release_setup.sh \
 
 RUN git clone https://github.com/ivukotic/ML_platform_tests.git
 
+# Have Jupyter shell setup AnalysisBase environment by default
+RUN echo -e '\n# Activate AnalysisBase environment on login shell\n. /release_setup.sh\n' >> /root/.bash_profile
+
 CMD ["/.run"]
