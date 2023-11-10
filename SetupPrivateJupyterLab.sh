@@ -17,7 +17,9 @@ ls
 echo "------"
 ls /
 
-echo "setting up users"
+echo "setting up user"
+echo "------"
+
 if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     PATH=$PATH:/usr/sbin
     /sync_users_debian.sh -u root."$CONNECT_GROUP" -g root."$CONNECT_GROUP" -e https://api.ci-connect.net:18080
