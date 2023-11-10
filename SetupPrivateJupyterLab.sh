@@ -21,6 +21,8 @@ if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     # Change to the user's homedir
     cd /home/$OWNER
 
+    chown -R  $OWNER: /venv
+
     # # get tutorial in.
     # cp -r /ML_platform_tests/tutorial ~/.
 
