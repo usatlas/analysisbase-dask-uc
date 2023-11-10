@@ -2,6 +2,8 @@ FROM sslhep/analysis-dask-base:24.2.26
 
 LABEL maintainer Ilija Vukotic <ivukotic@cern.ch>
 
+SHELL [ "/bin/bash", "-c" ]
+
 USER root
 
 RUN echo "Timestamp:" `date --utc` | tee /image-build-info.txt
@@ -14,7 +16,9 @@ COPY run.sh         /.run
 RUN chmod +x /.run
 
 RUN mkdir /workspace
-COPY private_jupyter_notebook_config.py /usr/local/etc/jupyter_notebook_config.py
+# Want this to go to $(jupyter --config-dir) which is /root/.jupyter for this container
+# c.f. https://docs.jupyter.org/en/latest/use/jupyter-directories.html#configuration-files
+COPY private_jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
 RUN . /release_setup.sh \
     && /venv/bin/jupyter server extension enable --py jupyterlab --sys-prefix
