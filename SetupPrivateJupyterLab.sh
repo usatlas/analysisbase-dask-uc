@@ -3,12 +3,6 @@
 # jupyter-nbextension install rise --py --sys-prefix
 # jupyter-nbextension enable rise --py --sys-prefix
 
-if [ "$1" != "" ]; then
-    echo "Git Repo $1 requested..."
-    cd /workspace/
-    git clone $1
-fi
-
 export SHELL=/bin/bash
 
 echo "------ setting up user"
@@ -37,12 +31,13 @@ if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
 
     # python3.8 -m pip --no-cache-dir install  root-pandas 
     
-    # unset JUPYTER_PATH
+    unset JUPYTER_PATH
     which jupyter
     unset JUPYTER_CONFIG_DIR
+    ls /root/.jupyter/jupyter_notebook_config.py
     cd /home/$OWNER
 
     # Invoke Jupyter lab as the user
-    su $OWNER -c "jupyter lab --ServerApp.root_dir=/home/${OWNER} --no-browser --config=/root/.jupyter/jupyter_notebook_config.py"
+    su $OWNER -c "jupyter lab --ServerApp.root_dir=/home/${OWNER} --ServerApp.port=9999 --ServerApp.ip='0.0.0.0' --no-browser --config=/root/.jupyter/jupyter_notebook_config.py"
 
 fi 
