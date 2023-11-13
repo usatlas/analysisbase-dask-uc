@@ -1,4 +1,4 @@
-FROM sslhep/analysis-dask-base:24.2.26
+FROM sslhep/analysis-dask-base:latest
 
 LABEL maintainer Ilija Vukotic <ivukotic@cern.ch>
 
@@ -33,4 +33,6 @@ RUN . /release_setup.sh \
 # Have Jupyter shell setup AnalysisBase environment by default
 RUN echo -e '\n# Activate AnalysisBase environment on login shell\n. /release_setup.sh\n' >> /root/.bash_profile
 
+# CMD given to container at runtime at UChicago Analysis Facility:
+# "/.run /ML_platform_tests/SetupPrivateJupyterLab.sh"
 CMD ["/.run"]
