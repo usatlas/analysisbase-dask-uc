@@ -1,0 +1,12 @@
+labextension:
+  factory:
+    module: dask_kubernetes
+    class: KubeCluster
+    args: []
+    kwargs: {}
+  default:
+    workers: 3
+    adapt:
+      minimum: 0
+      maximum: 100
+  initial: []

@@ -25,6 +25,8 @@ RUN mkdir /workspace
 # c.f. https://docs.jupyter.org/en/latest/use/jupyter-directories.html#configuration-files
 COPY private_jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
+COPY dask_config.yaml /etc/dask/dask_config.yaml
+
 RUN . /release_setup.sh \
     && /venv/bin/jupyter server extension enable --py jupyterlab --sys-prefix
 

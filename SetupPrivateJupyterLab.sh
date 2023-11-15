@@ -22,22 +22,14 @@ if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     cd /home/$OWNER
 
     chown -R  $OWNER: /venv
-
-    # # get tutorial in.
-    # cp -r /ML_platform_tests/tutorial ~/.
-
-    # # setup ROOT
-    # cd /opt/root/
-    # source bin/thisroot.sh
-    # cp -r $ROOTSYS/etc/notebook/kernels/root /usr/local/share/jupyter/kernels/
-
-    # python3.8 -m pip --no-cache-dir install  root-pandas 
     
     unset JUPYTER_PATH
     which jupyter
     unset JUPYTER_CONFIG_DIR
     ls /root/.jupyter/jupyter_notebook_config.py
     cd /home/$OWNER
+    
+    jupyter serverextension enable --py --sys-prefix dask_labextension
 
     # Invoke Jupyter lab as the user
     su $OWNER -c "jupyter lab --ServerApp.root_dir=/home/${OWNER} --ServerApp.port=9999 --ServerApp.ip='0.0.0.0' --no-browser --config=/root/.jupyter/jupyter_notebook_config.py"
