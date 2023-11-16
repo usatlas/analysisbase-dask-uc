@@ -93,52 +93,50 @@ kubernetes:
   worker-template-path: null
 
   scheduler-template:
-    {}
-    # kind: Pod
-    # metadata:
-    #   labels:
-    #     foo: bar
-    #     baz: quux
-    # spec:
-    #   restartPolicy: Never
-    #   containers:
-    #   - -scheduler
-    #     image: ghcr.io/dask/dask:latest
-    #     args:
-    #       - dask-scheduler
-    #     resources:
-    #       limits:
-    #         cpu: "1.75"
-    #         memory: 6G
-    #       requests:
-  #         cpu: "1.75"
-  #         memory: 6G
+    kind: Pod
+    metadata:
+      labels:
+        foo: bar
+        baz: quux
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: dask-scheduler
+          image: ghcr.io/dask/dask:latest
+          args:
+            - dask-scheduler
+          resources:
+            limits:
+              cpu: "1.75"
+              memory: 6G
+            requests:
+              cpu: "1.75"
+              memory: 6G
 
   worker-template:
-    {}
-    # kind: Pod
-    # metadata:
-    #   labels:
-    #     foo: bar
-    #     baz: quux
-    # spec:
-    #   restartPolicy: Never
-    #   containers:
-    #   - name: dask-worker
-    #     image: ghcr.io/dask/dask:latest
-    #     args:
-    #       - dask-worker
-    #       - --nthreads
-    #       - '2'
-    #       - --no-bokeh
-    #       - --memory-limit
-    #       - 6GB
-    #       - --death-timeout
-    #       - '60'
-    #     resources:
-    #       limits:
-    #         cpu: "1.75"
-    #         memory: 6G
-    #       requests:
-    #         cpu: "1.75"
-    #         memory: 6G
+    kind: Pod
+    metadata:
+      labels:
+        foo: bar
+        baz: quux
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: dask-worker
+          image: ghcr.io/dask/dask:latest
+          args:
+            - dask-worker
+            - --nthreads
+            - "2"
+            - --no-bokeh
+            - --memory-limit
+            - 6GB
+            - --death-timeout
+            - "60"
+          resources:
+            limits:
+              cpu: "1.75"
+              memory: 6G
+            requests:
+              cpu: "1.75"
+              memory: 6G
