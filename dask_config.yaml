@@ -10,3 +10,135 @@ labextension:
       minimum: 0
       maximum: 100
   initial: []
+
+distributed:
+  scheduler:
+    work-stealing: false
+
+kubernetes:
+  ####
+  # Config options here are applied to either the classic KubeCluster, operator KubeCluster or both.
+
+  # Shared options
+  name: "dask-{user}-{uuid}"
+  namespace: af-jupyter
+  env: {}
+  count:
+    start: 1
+    max: 100
+  scheduler-service-type: "ClusterIP"
+
+  # Operator KubeCluster options
+  image: "ghcr.io/dask/dask:latest"
+  resources: {}
+  worker-command: "dask-worker"
+  port-forward-cluster-ip: null
+  create-mode: CREATE_OR_CONNECT
+  shutdown-on-close: true
+  resource-timeout: 60
+  custom-cluster-spec: null
+  scheduler-forward-port: null
+  scheduler-jupyter: false
+
+  # Classic KubeCluster options
+  host: "0.0.0.0"
+  port: 0
+  idle-timeout: null
+  deploy-mode: "remote"
+  interface: null
+  protocol: "tcp://"
+  dashboard_address: ":8787"
+
+  # Dask Operator Controller options
+  controller:
+    worker-allocation:
+      batch-size: null
+      delay: null
+
+  # Timeout to wait for the scheduler service to be up (in seconds)
+  # Set it to 0 to wait indefinitely (not recommended)
+  scheduler-service-wait-timeout: 30
+  # Number of retries to resolve scheduler service name when running
+  # from within the Kubernetes cluster.
+  # Must be set to 1 or greater.
+  scheduler-service-name-resolution-retries: 20
+
+  scheduler-service-template:
+    apiVersion: v1
+    kind: Service
+    spec:
+      selector:
+        dask.org/cluster-name: "" # Cluster name will be added automatically
+        dask.org/component: scheduler
+      ports:
+        - name: tcp-comm
+          protocol: TCP
+          port: 8786
+          targetPort: 8786
+        - name: http-dashboard
+          protocol: TCP
+          port: 8787
+          targetPort: 8787
+
+  scheduler-pdb-template:
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          dask.org/cluster-name: "" # Cluster name will be added automatically
+          dask.org/component: scheduler
+
+  worker-template-path: null
+
+  scheduler-template:
+    {}
+    # kind: Pod
+    # metadata:
+    #   labels:
+    #     foo: bar
+    #     baz: quux
+    # spec:
+    #   restartPolicy: Never
+    #   containers:
+    #   - -scheduler
+    #     image: ghcr.io/dask/dask:latest
+    #     args:
+    #       - dask-scheduler
+    #     resources:
+    #       limits:
+    #         cpu: "1.75"
+    #         memory: 6G
+    #       requests:
+  #         cpu: "1.75"
+  #         memory: 6G
+
+  worker-template:
+    {}
+    # kind: Pod
+    # metadata:
+    #   labels:
+    #     foo: bar
+    #     baz: quux
+    # spec:
+    #   restartPolicy: Never
+    #   containers:
+    #   - name: dask-worker
+    #     image: ghcr.io/dask/dask:latest
+    #     args:
+    #       - dask-worker
+    #       - --nthreads
+    #       - '2'
+    #       - --no-bokeh
+    #       - --memory-limit
+    #       - 6GB
+    #       - --death-timeout
+    #       - '60'
+    #     resources:
+    #       limits:
+    #         cpu: "1.75"
+    #         memory: 6G
+    #       requests:
+    #         cpu: "1.75"
+    #         memory: 6G
