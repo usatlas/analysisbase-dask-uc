@@ -18,8 +18,8 @@ distributed:
   # logging:
   #   bokeh: critical
 
-  dashboard:
-    link: /user/{JUPYTERHUB_USER}/proxy/{port}/status
+  # dashboard:
+  #   link: /user/{user}/proxy/{port}/status
 
 kubernetes:
   ####
@@ -32,19 +32,20 @@ kubernetes:
   count:
     start: 1
     max: 100
-  scheduler-service-type: "ClusterIP"
+  # scheduler-service-type: "ClusterIP" <- default
 
   # Operator KubeCluster options
   image: "ghcr.io/dask/dask:latest"
   resources: {}
-  worker-command: "dask-worker"
-  port-forward-cluster-ip: null
-  create-mode: CREATE_OR_CONNECT
-  shutdown-on-close: true
-  resource-timeout: 60
-  custom-cluster-spec: null
-  scheduler-forward-port: null
-  scheduler-jupyter: false
+  # worker-command: "dask-worker" or ["dask", "worker"] <- default
+  # port-forward-cluster-ip: null
+  # create-mode: CREATE_OR_CONNECT <- default
+  # shutdown-on-close: True <- default
+  # resource-timeout: 60 <- default
+  # custom-cluster-spec: null
+  # scheduler-forward-port: null
+  # scheduler-jupyter: false
+  idle-timeout: 3600
 
   # # Classic KubeCluster options
   # host: "0.0.0.0"
