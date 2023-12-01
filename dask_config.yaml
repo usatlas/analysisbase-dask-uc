@@ -7,13 +7,19 @@ labextension:
   default:
     workers: 3
     adapt:
-      minimum: 0
+      minimum: 1
       maximum: 100
   initial: []
 
 distributed:
   scheduler:
     work-stealing: false
+
+  # logging:
+  #   bokeh: critical
+
+  dashboard:
+    link: /user/{JUPYTERHUB_USER}/proxy/{port}/status
 
 kubernetes:
   ####
@@ -40,20 +46,20 @@ kubernetes:
   scheduler-forward-port: null
   scheduler-jupyter: false
 
-  # Classic KubeCluster options
-  host: "0.0.0.0"
-  port: 0
-  idle-timeout: null
-  deploy-mode: "remote"
-  interface: null
-  protocol: "tcp://"
-  dashboard_address: ":8787"
+  # # Classic KubeCluster options
+  # host: "0.0.0.0"
+  # port: 0
+  # idle-timeout: null
+  # deploy-mode: "remote"
+  # interface: null
+  # protocol: "tcp://"
+  # dashboard_address: ":8787"
 
-  # Dask Operator Controller options
-  controller:
-    worker-allocation:
-      batch-size: null
-      delay: null
+  # # Dask Operator Controller options
+  # controller:
+  #   worker-allocation:
+  #     batch-size: null
+  #     delay: null
 
   # Timeout to wait for the scheduler service to be up (in seconds)
   # Set it to 0 to wait indefinitely (not recommended)
@@ -63,41 +69,38 @@ kubernetes:
   # Must be set to 1 or greater.
   scheduler-service-name-resolution-retries: 20
 
-  scheduler-service-template:
-    apiVersion: v1
-    kind: Service
-    spec:
-      selector:
-        dask.org/cluster-name: "" # Cluster name will be added automatically
-        dask.org/component: scheduler
-      ports:
-        - name: tcp-comm
-          protocol: TCP
-          port: 8786
-          targetPort: 8786
-        - name: http-dashboard
-          protocol: TCP
-          port: 8787
-          targetPort: 8787
+  # scheduler-service-template:
+  #   apiVersion: v1
+  #   kind: Service
+  #   spec:
+  #     selector:
+  #       dask.org/cluster-name: "" # Cluster name will be added automatically
+  #       dask.org/component: scheduler
+  #     ports:
+  #       - name: tcp-comm
+  #         protocol: TCP
+  #         port: 8786
+  #         targetPort: 8786
+  #       - name: http-dashboard
+  #         protocol: TCP
+  #         port: 8787
+  #         targetPort: 8787
 
-  scheduler-pdb-template:
-    apiVersion: policy/v1
-    kind: PodDisruptionBudget
-    spec:
-      minAvailable: 1
-      selector:
-        matchLabels:
-          dask.org/cluster-name: "" # Cluster name will be added automatically
-          dask.org/component: scheduler
+  # scheduler-pdb-template:
+  #   apiVersion: policy/v1
+  #   kind: PodDisruptionBudget
+  #   spec:
+  #     minAvailable: 1
+  #     selector:
+  #       matchLabels:
+  #         dask.org/cluster-name: "" # Cluster name will be added automatically
+  #         dask.org/component: scheduler
 
-  worker-template-path: null
+  # worker-template-path: null
 
   scheduler-template:
     kind: Pod
     metadata:
-      labels:
-        foo: bar
-        baz: quux
     spec:
       restartPolicy: Never
       serviceAccountName: jupyter
@@ -106,20 +109,21 @@ kubernetes:
           image: ghcr.io/dask/dask:latest
           args:
             - dask-scheduler
+            - --port
+            - "8786"
+            - --bokeh-port
+            - "8787"
           resources:
             limits:
               cpu: "1.75"
-              memory: 6G
+              memory: 2G
             requests:
               cpu: "1.75"
-              memory: 6G
+              memory: 2G
 
   worker-template:
     kind: Pod
     metadata:
-      labels:
-        foo: bar
-        baz: quux
     spec:
       restartPolicy: Never
       serviceAccountName: jupyter
@@ -132,7 +136,7 @@ kubernetes:
             - "2"
             - --no-bokeh
             - --memory-limit
-            - 6GB
+            - 5GB
             - --death-timeout
             - "60"
           resources:
