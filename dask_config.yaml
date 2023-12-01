@@ -5,10 +5,10 @@ labextension:
     args: []
     kwargs: {}
   default:
-    workers: 3
+    workers: "1"
     adapt:
-      minimum: 1
-      maximum: 100
+      minimum: "0"
+      maximum: "100"
   initial: []
 
 distributed:
@@ -30,8 +30,8 @@ kubernetes:
   namespace: af-jupyter
   env: {}
   count:
-    start: 1
-    max: 100
+    start: "1"
+    max: "100"
   # scheduler-service-type: "ClusterIP" <- default
 
   # Operator KubeCluster options
@@ -109,11 +109,11 @@ kubernetes:
   #       - name: dask-scheduler
   #         image: ghcr.io/dask/dask:latest
   #         args:
-  #           - dask-scheduler
-  #           - --port
-  #           - 8786
-  #           - --bokeh-port
-  #           - 8787
+  #           - "dask-scheduler"
+  #           - "--port"
+  #           - "8786"
+  #           - "--bokeh-port"
+  #           - "8787"
   #         resources:
   #           limits:
   #             cpu: "1.75"
@@ -132,18 +132,18 @@ kubernetes:
         - name: dask-worker
           image: ghcr.io/dask/dask:latest
           args:
-            - dask-worker
-            - --nthreads
+            - "dask-worker"
+            - "--nthreads"
             - "2"
-            - --no-bokeh
-            - --memory-limit
-            - 5GB
-            - --death-timeout
+            - "--no-bokeh"
+            - "--memory-limit"
+            - "5GB"
+            - "--death-timeout"
             - "60"
           resources:
             limits:
               cpu: "1.75"
-              memory: 6G
+              memory: "6G"
             requests:
               cpu: "1.75"
-              memory: 6G
+              memory: "6G"
