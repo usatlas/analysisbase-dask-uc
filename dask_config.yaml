@@ -5,10 +5,10 @@ labextension:
     args: []
     kwargs: {}
   default:
-    workers: "1"
+    workers: 1
     adapt:
-      minimum: "0"
-      maximum: "100"
+      minimum: 0
+      maximum: 100
   initial: []
 
 distributed:
@@ -30,8 +30,8 @@ kubernetes:
   namespace: af-jupyter
   env: {}
   count:
-    start: "1"
-    max: "100"
+    start: 1
+    max: 100
   # scheduler-service-type: "ClusterIP" <- default
 
   # Operator KubeCluster options
