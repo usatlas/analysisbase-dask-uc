@@ -26,34 +26,34 @@ kubernetes:
   count:
     start: 1
     max: 100
-  scheduler-service-type: "ClusterIP"
+  # scheduler-service-type: "ClusterIP"
 
   # Operator KubeCluster options
   image: "ghcr.io/dask/dask:latest"
   resources: {}
-  worker-command: "dask-worker"
-  port-forward-cluster-ip: null
-  create-mode: CREATE_OR_CONNECT
-  shutdown-on-close: true
-  resource-timeout: 60
-  custom-cluster-spec: null
-  scheduler-forward-port: null
-  scheduler-jupyter: false
+  # worker-command: "dask-worker"
+  # port-forward-cluster-ip: null
+  # create-mode: CREATE_OR_CONNECT
+  # shutdown-on-close: true
+  # resource-timeout: 60
+  # custom-cluster-spec: null
+  # scheduler-forward-port: null
+  # scheduler-jupyter: false
 
-  # Classic KubeCluster options
-  host: "0.0.0.0"
-  port: 0
-  idle-timeout: null
-  deploy-mode: "remote"
-  interface: null
-  protocol: "tcp://"
-  dashboard_address: ":8787"
+  # # Classic KubeCluster options
+  # host: "0.0.0.0"
+  # port: 0
+  # idle-timeout: null
+  # deploy-mode: "remote"
+  # interface: null
+  # protocol: "tcp://"
+  # dashboard_address: ":8787"
 
-  # Dask Operator Controller options
-  controller:
-    worker-allocation:
-      batch-size: null
-      delay: null
+  # # Dask Operator Controller options
+  # controller:
+  #   worker-allocation:
+  #     batch-size: null
+  #     delay: null
 
   # Timeout to wait for the scheduler service to be up (in seconds)
   # Set it to 0 to wait indefinitely (not recommended)
