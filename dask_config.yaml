@@ -99,28 +99,28 @@ kubernetes:
 
   # worker-template-path: null
 
-  scheduler-template:
-    kind: Pod
-    metadata:
-    spec:
-      restartPolicy: Never
-      serviceAccountName: jupyter
-      containers:
-        - name: dask-scheduler
-          image: ghcr.io/dask/dask:latest
-          args:
-            - dask-scheduler
-            - --port
-            - 8786
-            - --bokeh-port
-            - 8787
-          resources:
-            limits:
-              cpu: "1.75"
-              memory: 2G
-            requests:
-              cpu: "1.75"
-              memory: 2G
+  # scheduler-template:
+  #   kind: Pod
+  #   metadata:
+  #   spec:
+  #     restartPolicy: Never
+  #     serviceAccountName: jupyter
+  #     containers:
+  #       - name: dask-scheduler
+  #         image: ghcr.io/dask/dask:latest
+  #         args:
+  #           - dask-scheduler
+  #           - --port
+  #           - 8786
+  #           - --bokeh-port
+  #           - 8787
+  #         resources:
+  #           limits:
+  #             cpu: "1.75"
+  #             memory: 2G
+  #           requests:
+  #             cpu: "1.75"
+  #             memory: 2G
 
   worker-template:
     kind: Pod
@@ -132,7 +132,7 @@ kubernetes:
         - name: dask-worker
           image: ghcr.io/dask/dask:latest
           args:
-            # - dask-worker
+            - dask-worker
             - --nthreads
             - "2"
             - --no-bokeh
