@@ -5,7 +5,7 @@ labextension:
     args: []
     kwargs: {}
   default:
-    workers: 1
+    workers: 3
     adapt:
       minimum: 0
       maximum: 100
@@ -14,12 +14,6 @@ labextension:
 distributed:
   scheduler:
     work-stealing: false
-
-  # logging:
-  #   bokeh: critical
-
-  # dashboard:
-  #   link: /user/{user}/proxy/{port}/status
 
 kubernetes:
   ####
@@ -32,35 +26,34 @@ kubernetes:
   count:
     start: 1
     max: 100
-  # scheduler-service-type: "ClusterIP" <- default
+  scheduler-service-type: "ClusterIP"
 
   # Operator KubeCluster options
   image: "ghcr.io/dask/dask:latest"
   resources: {}
-  # worker-command: "dask-worker" or ["dask", "worker"] <- default
-  # port-forward-cluster-ip: null
-  # create-mode: CREATE_OR_CONNECT <- default
-  # shutdown-on-close: True <- default
-  # resource-timeout: 60 <- default
-  # custom-cluster-spec: null
-  # scheduler-forward-port: null
-  # scheduler-jupyter: false
-  idle-timeout: 3600
+  worker-command: "dask-worker"
+  port-forward-cluster-ip: null
+  create-mode: CREATE_OR_CONNECT
+  shutdown-on-close: true
+  resource-timeout: 60
+  custom-cluster-spec: null
+  scheduler-forward-port: null
+  scheduler-jupyter: false
 
-  # # Classic KubeCluster options
-  # host: "0.0.0.0"
-  # port: 0
-  # idle-timeout: null
-  # deploy-mode: "remote"
-  # interface: null
-  # protocol: "tcp://"
-  # dashboard_address: ":8787"
+  # Classic KubeCluster options
+  host: "0.0.0.0"
+  port: 0
+  idle-timeout: null
+  deploy-mode: "remote"
+  interface: null
+  protocol: "tcp://"
+  dashboard_address: ":8787"
 
-  # # Dask Operator Controller options
-  # controller:
-  #   worker-allocation:
-  #     batch-size: null
-  #     delay: null
+  # Dask Operator Controller options
+  controller:
+    worker-allocation:
+      batch-size: null
+      delay: null
 
   # Timeout to wait for the scheduler service to be up (in seconds)
   # Set it to 0 to wait indefinitely (not recommended)
@@ -70,34 +63,34 @@ kubernetes:
   # Must be set to 1 or greater.
   scheduler-service-name-resolution-retries: 20
 
-  # scheduler-service-template:
-  #   apiVersion: v1
-  #   kind: Service
-  #   spec:
-  #     selector:
-  #       dask.org/cluster-name: "" # Cluster name will be added automatically
-  #       dask.org/component: scheduler
-  #     ports:
-  #       - name: tcp-comm
-  #         protocol: TCP
-  #         port: 8786
-  #         targetPort: 8786
-  #       - name: http-dashboard
-  #         protocol: TCP
-  #         port: 8787
-  #         targetPort: 8787
+  scheduler-service-template:
+    apiVersion: v1
+    kind: Service
+    spec:
+      selector:
+        dask.org/cluster-name: "" # Cluster name will be added automatically
+        dask.org/component: scheduler
+      ports:
+        - name: tcp-comm
+          protocol: TCP
+          port: 8786
+          targetPort: 8786
+        - name: http-dashboard
+          protocol: TCP
+          port: 8787
+          targetPort: 8787
 
-  # scheduler-pdb-template:
-  #   apiVersion: policy/v1
-  #   kind: PodDisruptionBudget
-  #   spec:
-  #     minAvailable: 1
-  #     selector:
-  #       matchLabels:
-  #         dask.org/cluster-name: "" # Cluster name will be added automatically
-  #         dask.org/component: scheduler
+  scheduler-pdb-template:
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          dask.org/cluster-name: "" # Cluster name will be added automatically
+          dask.org/component: scheduler
 
-  # worker-template-path: null
+  worker-template-path: null
 
   scheduler-template:
     kind: Pod
@@ -110,17 +103,13 @@ kubernetes:
           image: ghcr.io/dask/dask:latest
           args:
             - dask-scheduler
-          #   - "--port"
-          #   - "8786"
-          #   - "--bokeh-port"
-          #   - "8787"
           resources:
             limits:
               cpu: "1.75"
-              memory: 2G
+              memory: 6G
             requests:
               cpu: "1.75"
-              memory: 2G
+              memory: 6G
 
   worker-template:
     kind: Pod
@@ -132,18 +121,18 @@ kubernetes:
         - name: dask-worker
           image: ghcr.io/dask/dask:latest
           args:
-            - "dask-worker"
-            - "--nthreads"
+            - dask-worker
+            - --nthreads
             - "2"
-            - "--no-bokeh"
-            - "--memory-limit"
-            - "5GB"
-            - "--death-timeout"
+            - --no-bokeh
+            - --memory-limit
+            - 5GB
+            - --death-timeout
             - "60"
           resources:
             limits:
               cpu: "1.75"
-              memory: "6G"
+              memory: 6G
             requests:
               cpu: "1.75"
-              memory: "6G"
+              memory: 6G
