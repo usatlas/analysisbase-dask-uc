@@ -16,51 +16,15 @@ distributed:
     work-stealing: false
 
 kubernetes:
-  ####
-  # Config options here are applied to either the classic KubeCluster, operator KubeCluster or both.
-
-  # Shared options
   name: "dask-{user}-{uuid}"
   namespace: af-jupyter
   env: {}
   count:
     start: 1
     max: 100
-  # scheduler-service-type: "ClusterIP"
-
-  # Operator KubeCluster options
   image: "ghcr.io/dask/dask:latest"
   resources: {}
-  # worker-command: "dask-worker"
-  # port-forward-cluster-ip: null
-  # create-mode: CREATE_OR_CONNECT
-  # shutdown-on-close: true
-  # resource-timeout: 60
-  # custom-cluster-spec: null
-  # scheduler-forward-port: null
-  # scheduler-jupyter: false
-
-  # # Classic KubeCluster options
-  # host: "0.0.0.0"
-  # port: 0
-  # idle-timeout: null
-  # deploy-mode: "remote"
-  # interface: null
-  # protocol: "tcp://"
-  # dashboard_address: ":8787"
-
-  # # Dask Operator Controller options
-  # controller:
-  #   worker-allocation:
-  #     batch-size: null
-  #     delay: null
-
-  # Timeout to wait for the scheduler service to be up (in seconds)
-  # Set it to 0 to wait indefinitely (not recommended)
   scheduler-service-wait-timeout: 30
-  # Number of retries to resolve scheduler service name when running
-  # from within the Kubernetes cluster.
-  # Must be set to 1 or greater.
   scheduler-service-name-resolution-retries: 20
 
   scheduler-service-template:
