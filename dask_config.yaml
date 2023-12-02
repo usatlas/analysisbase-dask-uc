@@ -103,6 +103,10 @@ kubernetes:
           image: ghcr.io/dask/dask:latest
           args:
             - dask-scheduler
+            - --port
+            - "8786"
+            - --bokeh-port
+            - "8787"
           resources:
             limits:
               cpu: "1.75"
