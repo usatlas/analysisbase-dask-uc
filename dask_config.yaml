@@ -110,10 +110,10 @@ kubernetes:
           resources:
             limits:
               cpu: "1.75"
-              memory: 6G
+              memory: 2G
             requests:
               cpu: "1.75"
-              memory: 6G
+              memory: 2G
 
   worker-template:
     kind: Pod
@@ -128,7 +128,7 @@ kubernetes:
             - dask-worker
             - --nthreads
             - "2"
-            - --no-bokeh
+            # - --no-bokeh
             - --memory-limit
             - 5GB
             - --death-timeout
