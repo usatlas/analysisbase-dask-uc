@@ -12,7 +12,9 @@ labextension:
   initial: []
 
 distributed:
-  dashboard: "https://{host}.dask.af.uchicago.edu/:{port}/status"
+  dashboard:
+    # link: "https://{host}.dask.af.uchicago.edu/:{port}/status"
+    link: "{scheme}://{host}:{port}/status"
   scheduler:
     work-stealing: false
 
