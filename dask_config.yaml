@@ -12,6 +12,7 @@ labextension:
   initial: []
 
 distributed:
+  dashboard: "https://{host}.dask.af.uchicago.edu/:{port}/status"
   scheduler:
     work-stealing: false
 
@@ -66,7 +67,8 @@ kubernetes:
         - name: dask-scheduler
           image: ghcr.io/dask/dask:latest
           args:
-            - dask-scheduler
+            - dask
+            - scheduler
             - --port
             - "8786"
             - --bokeh-port
@@ -89,7 +91,8 @@ kubernetes:
         - name: dask-worker
           image: ghcr.io/dask/dask:latest
           args:
-            - dask-worker
+            - dask
+            - worker
             - --nthreads
             - "2"
             # - --no-bokeh
@@ -99,8 +102,8 @@ kubernetes:
             - "60"
           resources:
             limits:
-              cpu: "1.75"
-              memory: 6G
+              cpu: "2"
+              memory: 3G
             requests:
-              cpu: "1.75"
-              memory: 6G
+              cpu: "1"
+              memory: 2G
