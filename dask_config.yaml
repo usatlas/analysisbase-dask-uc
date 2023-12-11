@@ -14,7 +14,8 @@ labextension:
 distributed:
   dashboard:
     # link: "https://{host}.dask.af.uchicago.edu/:{port}/status"
-    link: "{scheme}://{host}:{port}/status"
+    link: "https://dask.af.uchicago.edu:{port}/{host}/status"
+    # link: "{scheme}://{host}:{port}/status"
   scheduler:
     work-stealing: false
 
