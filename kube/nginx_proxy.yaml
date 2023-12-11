@@ -11,21 +11,29 @@ data:
       worker_connections  10240;
     }
     http {
-      
+       map $http_upgrade $connection_upgrade {
+        default upgrade;
+        '' close;
+       }
+
       server {
           listen       8080;
           server_name  localhost;
-          location ^~ /daskboard/ {
-            proxy_pass http://dask-ivukotic-fb1cf4c5-5:8787;
-            # proxy_set_header Host $http_host;
-            # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            # proxy_set_header X-Real-IP $remote_addr;
-            # proxy_http_version 1.1;
-            # proxy_redirect off;
-            # proxy_buffering off;
-            # proxy_set_header Upgrade $http_upgrade;
-            # # proxy_set_header Connection $connection_upgrade;
-            # proxy_read_timeout 86400;
+          location ^~ / {
+             if ( $request_uri ~ ^/(.*)/.*$ ) {
+                proxy_pass http://$1:8787;
+                
+            }
+            # proxy_pass http://dask-ivukotic-fb1cf4c5-5:8787;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_http_version 1.1;
+            proxy_redirect off;
+            proxy_buffering off;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_read_timeout 86400;
           }
         }
     }
@@ -78,3 +86,28 @@ spec:
       nodePort: 30001
   selector:
     app: nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: n4dask
+  namespace: af-jupyter
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+    - hosts:
+        - "n4dask.af.uchicago.edu"
+      secretName: nginx-tls
+  rules:
+    - host: n4dask.af.uchicago.edu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: n4dask
+                port:
+                  number: 80

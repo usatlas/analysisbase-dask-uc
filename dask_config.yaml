@@ -13,8 +13,7 @@ labextension:
 
 distributed:
   dashboard:
-    # link: "https://{host}.dask.af.uchicago.edu/:{port}/status"
-    link: "https://dask.af.uchicago.edu:{port}/{host}/status"
+    link: "https://n4dask.af.uchicago.edu/{host}/status"
     # link: "{scheme}://{host}:{port}/status"
   scheduler:
     work-stealing: false
@@ -74,10 +73,10 @@ kubernetes:
             - scheduler
             - --port
             - "8786"
-            # - -bokeh-prefix
-            # - daskboard
             - --bokeh-port
             - "8787"
+            - --bokeh-prefix
+            - "{host}"
           resources:
             limits:
               cpu: "1.75"
