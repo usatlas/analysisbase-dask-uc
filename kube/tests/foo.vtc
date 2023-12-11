@@ -1,0 +1,36 @@
+varnishtest "Testing URL rewriting, for real"
+
+server s1 {
+#    rxreq
+#	txresp
+#	expect req.url == "/content/articles/my_post.html"
+
+	rxreq
+	txresp
+	expect req.url == "/servicexxx.af-jupyter/status"
+} -start
+
+varnish v1 -vcl+backend {
+    
+    import std;
+	sub vcl_recv {
+        
+		if (req.url ~ "/cmsa/post/") {
+			set req.url = regsuball(req.url, "/cmsa/post/", "/content/articles/");
+		}
+        if (req.url ~ "/dask-service/") {
+            set req.http.x-fuck  = regsub(req.url, "^/dask-service/([a-zA-Z0-9 -]*).af-jupyter/(.*)", "\1");
+            set req.url = regsub(req.url, "/dask-service/([a-zA-Z0-9 -]*).af-jupyter/", "/");
+            set req.http.x-fuck=req.http.x-fuck+".af-jupyter";  
+        }
+	}
+
+} -start
+
+client c1 {
+#	txreq -url "/cmsa/post/my_post.html"
+#	rxresp
+
+    txreq -url "/dask-service/servicexxx.af-jupyter/status/asdf"
+    rxresp
+} -run

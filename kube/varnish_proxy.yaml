@@ -1,0 +1,84 @@
+# to test:
+# docker run --rm -it -P -v .\tests\foo.vtc:/etc/varnish/tests/foo.vtc varnish:latest varnishtest /etc/varnish/tests/foo.vtc
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: v4dask
+  namespace: af-jupyter
+  labels:
+    k8s-app: v4dask
+data:
+  default.vcl: |-
+    vcl 4.1;
+    import std;
+    import goto;
+
+    # import dynamic;
+    # import directors;
+
+    backend default none;
+
+    sub vcl_recv {     
+      if (req.url ~ "/dask-service/") {
+        set req.http.x-dask-service  = regsub(req.url, "^/dask-service/([a-zA-Z0-9 -]*).af-jupyter/(.*)", "\1");
+        set req.http.x-dask-service = req.http.x-dask-service + ".af-jupyter";  
+        set req.url = regsub(req.url, "/dask-service/([a-zA-Z0-9 -]*).af-jupyter/", "/");
+      }
+    }
+
+    sub vcl_backend_fetch {
+            set bereq.backend = goto.dns_backend(req.http.x-dask-service);
+    }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: varnish4dask
+  namespace: af-jupyter
+  labels:
+    k8s-app: v4dask
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: v4dask
+  template:
+    metadata:
+      labels:
+        k8s-app: v4dask
+    spec:
+      containers:
+        - name: v4dask
+          image: varnish:latest
+          # args: ["-t", "3600"]
+          command: ["varnishd"]
+          args:
+            [
+              "-F",
+              "-f",
+              "/etc/varnish/default.vcl",
+              "-a",
+              "http=:6081,HTTP",
+              "-p",
+              "feature=+http2",
+              "-s",
+              "malloc,$VARNISH_SIZE",
+            ]
+          ports:
+            - containerPort: 6081
+              hostPort: 8787
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/varnish/
+          resources:
+            requests:
+              cpu: "1"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+      volumes:
+        - name: config-volume
+          configMap:
+            name: v4dask

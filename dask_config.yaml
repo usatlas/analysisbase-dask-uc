@@ -74,6 +74,8 @@ kubernetes:
             - scheduler
             - --port
             - "8786"
+            - -bokeh-prefix
+            - daskboard
             - --bokeh-port
             - "8787"
           resources:
