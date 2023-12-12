@@ -20,9 +20,8 @@ data:
           listen       8080;
           server_name  localhost;
           location ^~ / {
-             if ( $request_uri ~ ^/(.*)/.*$ ) {
-                proxy_pass http://$1:8787;
-                
+            if ( $request_uri ~ ^/(.*)/.*$ ) {
+              proxy_pass http://$1:8787;  
             }
             # proxy_pass http://dask-ivukotic-fb1cf4c5-5:8787;
             proxy_set_header Host $http_host;

@@ -59,7 +59,7 @@ kubernetes:
 
   worker-template-path: null
 
-  scheduler-template:
+  scheduler-template: # NOT TAKEN INTO ACCOUNT AT ALL!
     kind: Pod
     metadata:
     spec:
@@ -79,10 +79,10 @@ kubernetes:
             - "{host}"
           resources:
             limits:
-              cpu: "1.75"
+              cpu: "2.0"
               memory: 2G
             requests:
-              cpu: "1.75"
+              cpu: "1.5"
               memory: 2G
 
   worker-template:
