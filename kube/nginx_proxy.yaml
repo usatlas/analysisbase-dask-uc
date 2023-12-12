@@ -19,11 +19,34 @@ data:
       server {
           listen       8080;
           server_name  localhost;
-          location ^~ / {
-            if ( $request_uri ~ ^/(.*)/.*$ ) {
-              proxy_pass http://$1:8787;  
-            }
-            # proxy_pass http://dask-ivukotic-fb1cf4c5-5:8787;
+
+          location ~ ^/static.* {
+            resolver kube-dns.kube-system.svc.cluster.local;
+            proxy_pass http://dask-ivukotic-c9caa1e2-b.af-jupyter.svc.cluster.local:8787;  
+            
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_http_version 1.1;
+            proxy_redirect off;
+            proxy_buffering off;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_read_timeout 86400;
+          }
+          
+          location ~ ^/(.*).af-jupyter/(.*) {
+
+            add_header X-debug-message-1 "Matched Initial URL" always;
+            resolver kube-dns.kube-system.svc.cluster.local;
+
+            set $svcname $1;
+            set $match2 $2;
+
+            rewrite /dask-.*-jupyter/(.*) /$1 break;
+            add_header X-debug-message-2 "rewrote URL to $request_uri $svcname /$1" always;
+            proxy_pass http://$svcname.af-jupyter.svc.cluster.local:8787;  
+
             proxy_set_header Host $http_host;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Real-IP $remote_addr;
@@ -72,41 +95,3 @@ spec:
         - name: nginx-conf
           configMap:
             name: nginx-conf
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: n4dask
-spec:
-  type: NodePort
-  ports:
-    - port: 80
-      targetPort: 8080
-      nodePort: 30001
-  selector:
-    app: nginx
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: n4dask
-  namespace: af-jupyter
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: nginx
-spec:
-  tls:
-    - hosts:
-        - "n4dask.af.uchicago.edu"
-      secretName: nginx-tls
-  rules:
-    - host: n4dask.af.uchicago.edu
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: n4dask
-                port:
-                  number: 80
