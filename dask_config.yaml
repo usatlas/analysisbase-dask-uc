@@ -59,7 +59,7 @@ kubernetes:
 
   worker-template-path: null
 
-  scheduler-template: # NOT TAKEN INTO ACCOUNT AT ALL!
+  scheduler-template:
     kind: Pod
     metadata:
     spec:
@@ -68,17 +68,10 @@ kubernetes:
       containers:
         - name: dask-scheduler
           image: ghcr.io/dask/dask:latest
-          args:
-            [
-              "dask",
-              "scheduler",
-              "--port",
-              "8786",
-              "--bokeh-port",
-              "8787",
-              "--boke-prefix",
-              "{host}",
-            ]
+          env:
+            - name: DASK_BOKEH_PREFIX
+              value: "{host}"
+          args: ["dask", "scheduler", "--port", "8786", "--bokeh-port", "8787"]
           resources:
             limits:
               cpu: "2.0"
