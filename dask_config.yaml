@@ -69,14 +69,16 @@ kubernetes:
         - name: dask-scheduler
           image: ghcr.io/dask/dask:latest
           args:
-            - dask
-            - scheduler
-            - --port
-            - "8786"
-            - --bokeh-port
-            - "8787"
-            - --bokeh-prefix
-            - "{host}"
+            [
+              "dask",
+              "scheduler",
+              "--port",
+              "8786",
+              "--bokeh-port",
+              "8787",
+              "--boke-prefix",
+              "{host}",
+            ]
           resources:
             limits:
               cpu: "2.0"
@@ -95,15 +97,16 @@ kubernetes:
         - name: dask-worker
           image: ghcr.io/dask/dask:latest
           args:
-            - dask
-            - worker
-            - --nthreads
-            - "2"
-            # - --no-bokeh
-            - --memory-limit
-            - 5GB
-            - --death-timeout
-            - "60"
+            [
+              "dask",
+              "worker",
+              "--nthreads",
+              "2",
+              "--memory-limit",
+              "5GB",
+              "--death-timeout",
+              "60",
+            ]
           resources:
             limits:
               cpu: "2"
