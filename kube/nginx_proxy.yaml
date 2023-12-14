@@ -34,20 +34,23 @@ data:
             proxy_read_timeout 86400;
           }
 
-          # location ~ ^/static/.* {
-          #   resolver kube-dns.kube-system.svc.cluster.local;
-          #   proxy_pass http://dask-ivukotic-c9caa1e2-b.af-jupyter.svc.cluster.local:8787;  
+          location ~ ^/127.0.0.1/(.*) {
+            resolver kube-dns.kube-system.svc.cluster.local;
             
-          #   proxy_set_header Host $http_host;
-          #   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          #   proxy_set_header X-Real-IP $remote_addr;
-          #   proxy_http_version 1.1;
-          #   proxy_redirect off;
-          #   proxy_buffering off;
-          #   proxy_set_header Upgrade $http_upgrade;
-          #   proxy_set_header Connection $connection_upgrade;
-          #   proxy_read_timeout 86400;
-          # }
+            rewrite /127.0.0.1/(.*) /$1 break;
+            add_header X-debug-message-2 "rewrote URL to $request_uri /$1" always;
+            proxy_pass http://127.0.0.1:8787;  
+            
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_http_version 1.1;
+            proxy_redirect off;
+            proxy_buffering off;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_read_timeout 86400;
+          }
           
           location ~ ^/(.*).af-jupyter/(.*) {
 
