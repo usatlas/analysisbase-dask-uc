@@ -25,8 +25,6 @@ if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     ls /root/.jupyter/jupyter_notebook_config.py
     cd /home/$OWNER
     
-    jupyter serverextension enable --py --sys-prefix dask_labextension
-
     # Invoke Jupyter lab as the user
     su $OWNER -c "jupyter lab --ServerApp.root_dir=/home/${OWNER} --ServerApp.port=9999 --ServerApp.ip='0.0.0.0' --no-browser --config=/root/.jupyter/jupyter_notebook_config.py"
 
