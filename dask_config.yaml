@@ -88,8 +88,8 @@ kubernetes:
       serviceAccountName: jupyter
       containers:
         - name: dask-worker
-          image: hub.opensciencegrid.org/usatlas/analysis-dask-base:latest
-          # image: ghcr.io/dask/dask:latest
+          # image: hub.opensciencegrid.org/usatlas/analysis-dask-base:latest
+          image: ghcr.io/dask/dask:latest
           args:
             [
               "dask",
