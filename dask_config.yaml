@@ -97,14 +97,14 @@ kubernetes:
               "--nthreads",
               "2",
               "--memory-limit",
-              "5GB",
+              "8GB",
               "--death-timeout",
               "60",
             ]
           resources:
             limits:
               cpu: "2"
-              memory: 8G
+              memory: 20G
             requests:
               cpu: "1"
-              memory: 5G
+              memory: 10G
