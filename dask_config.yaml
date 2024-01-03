@@ -88,8 +88,8 @@ kubernetes:
       serviceAccountName: jupyter
       containers:
         - name: dask-worker
-          # image: hub.opensciencegrid.org/usatlas/analysis-dask-base:latest
-          image: ghcr.io/dask/dask:latest
+          image: hub.opensciencegrid.org/usatlas/analysis-dask-base:latest
+          # image: ghcr.io/dask/dask:latest
           args:
             [
               "dask",
@@ -104,7 +104,7 @@ kubernetes:
           resources:
             limits:
               cpu: "2"
-              memory: 3G
+              memory: 8G
             requests:
               cpu: "1"
-              memory: 2G
+              memory: 5G
