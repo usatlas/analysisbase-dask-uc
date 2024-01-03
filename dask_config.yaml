@@ -67,7 +67,8 @@ kubernetes:
       serviceAccountName: jupyter
       containers:
         - name: dask-scheduler
-          image: ghcr.io/dask/dask:latest
+          # image: ghcr.io/dask/dask:latest
+          image: hub.opensciencegrid.org/usatlas/analysis-dask-base:latest
           env:
             - name: DASK_BOKEH_PREFIX
               value: "{host}"
@@ -75,10 +76,10 @@ kubernetes:
           resources:
             limits:
               cpu: "2.0"
-              memory: 2G
+              memory: 20G
             requests:
               cpu: "1.5"
-              memory: 2G
+              memory: 10G
 
   worker-template:
     kind: Pod
