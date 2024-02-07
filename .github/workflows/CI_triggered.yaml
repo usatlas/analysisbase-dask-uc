@@ -1,11 +1,6 @@
 name: Build AnalysisBase ML image
 
 on:
-  push:
-    branches:
-      - "*"
-    tags:
-      - "v*.*.*"
   repository_dispatch:
     types: gitops-analysis-base-trigger
 
@@ -26,10 +21,7 @@ jobs:
             hub.opensciencegrid.org/usatlas/analysis-dask-uc
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
             type=sha,
-            if: ${{ github.event.client_payload.ref }}
             type=raw,value=${{ github.event.client_payload.ref }}
 
       - name: Set up QEMU
@@ -56,6 +48,8 @@ jobs:
         with:
           context: .
           file: Dockerfile
+          build-args: |
+            BASE_TAG=${{ github.event.client_payload.ref }}
           load: true
           push: false
           tags: ${{ steps.meta.outputs.tags }}
@@ -66,6 +60,8 @@ jobs:
         with:
           context: .
           file: Dockerfile
+          build-args: |
+            BASE_TAG=${{ github.event.client_payload.ref }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

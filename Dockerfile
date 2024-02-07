@@ -1,4 +1,5 @@
-FROM sslhep/analysis-dask-base:latest
+ARG BASE_TAG=latest
+FROM sslhep/analysis-dask-base:${BASE_TAG}
 
 LABEL maintainer Ilija Vukotic <ivukotic@cern.ch>
 
