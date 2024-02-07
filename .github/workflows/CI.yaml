@@ -3,7 +3,7 @@ name: Build AnalysisBase ML image
 on:
   push:
     branches:
-      - main
+      - "*"
     tags:
       - "v*.*.*"
   repository_dispatch:
@@ -29,7 +29,8 @@ jobs:
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=sha,
-            type=raw,value=latest
+            if: ${{ github.event.client_payload.ref }}
+            type=raw,value=${{ github.event.client_payload.ref }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.0.0
