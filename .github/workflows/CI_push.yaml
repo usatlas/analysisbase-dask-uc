@@ -52,8 +52,6 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          build-args: |
-            BASE_TAG=${{ github.ref }}
           load: true
           push: false
           tags: ${{ steps.meta.outputs.tags }}
@@ -64,8 +62,6 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          build-args: |
-            BASE_TAG=${{ github.ref }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
