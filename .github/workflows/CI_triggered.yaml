@@ -1,4 +1,4 @@
-name: Build AnalysisBase ML image
+name: Build on trigger
 
 on:
   repository_dispatch:
