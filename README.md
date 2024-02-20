@@ -1,5 +1,8 @@
 # analysisbase-dask-uc
+
 UC AF specific image building
+
+It is rebuilt only when triggered by a change in base image, it tags image based on the tag of base.
 
 ## Run
 

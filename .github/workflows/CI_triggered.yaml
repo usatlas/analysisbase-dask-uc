@@ -1,15 +1,7 @@
-name: Build AnalysisBase ML image
+# trigger uses "github.event.client_payload.ref" tag of the base image 
+name: Build on trigger
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - "v*.*.*"
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
   repository_dispatch:
     types: gitops-analysis-base-trigger
 
@@ -22,18 +14,14 @@ jobs:
 
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v5.5.1
         with:
-          # list of Docker images to use as base name for tags
           images: |
             sslhep/analysis-dask-uc
             hub.opensciencegrid.org/usatlas/analysis-dask-uc
-          # generate Docker tags based on the following events/attributes
           tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
             type=sha,
-            type=raw,value=latest
+            type=raw,value=${{ github.event.client_payload.ref }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.0.0
@@ -42,43 +30,45 @@ jobs:
         uses: docker/setup-buildx-action@v3.0.0
 
       - name: Login to Docker Hub
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3.0.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Login to Harbor Container Registry
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v3.0.0
         with:
           registry: hub.opensciencegrid.org
           username: ${{ secrets.HARBOR_USERNAME }}
           password: ${{ secrets.HARBOR_PASSWORD }}
 
       - name: Test build
-        if: github.event_name == 'pull_request'
-        uses: docker/build-push-action@v5.0.0
+        uses: docker/build-push-action@v5.1.0
         with:
           context: .
           file: Dockerfile
+          build-args: |
+            BASE_TAG=${{ github.event.client_payload.ref }}
           load: true
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push
-        if: github.event_name != 'pull_request'
-        uses: docker/build-push-action@v5.0.0
+        uses: docker/build-push-action@v5.1.0
         with:
           context: .
           file: Dockerfile
+          build-args: |
+            BASE_TAG=${{ github.event.client_payload.ref }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+    # we could use the code commented bellow to update AF frontend to add/change images selectable.
+
     #   - name: Repository Dispatch
-    #     uses: peter-evans/repository-dispatch@v2.1.2
+    #     uses: peter-evans/repository-dispatch@v3.0.0
     #     with:
     #       token: ${{ secrets.GITOPS_REBUILD_TRIGGER }}
     #       repository: analysis-dask/usatlas
