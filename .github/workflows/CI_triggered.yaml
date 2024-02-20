@@ -1,3 +1,4 @@
+# trigger uses "github.event.client_payload.ref" tag of the base image 
 name: Build on trigger
 
 on:
