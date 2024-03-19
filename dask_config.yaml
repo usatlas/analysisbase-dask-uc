@@ -68,7 +68,7 @@ kubernetes:
       containers:
         - name: dask-scheduler
           # image: ghcr.io/dask/dask:latest
-          image: hub.opensciencegrid.org/usatlas/analysis-dask-base:latest
+          image: hub.opensciencegrid.org/usatlas/analysis-dask-base:dev
           env:
             - name: DASK_BOKEH_PREFIX
               value: "{host}"
@@ -89,7 +89,7 @@ kubernetes:
       serviceAccountName: jupyter
       containers:
         - name: dask-worker
-          image: hub.opensciencegrid.org/usatlas/analysis-dask-base:latest
+          image: hub.opensciencegrid.org/usatlas/analysis-dask-base:dev
           # image: ghcr.io/dask/dask:latest
           args:
             [
