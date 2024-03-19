@@ -23,6 +23,12 @@ jobs:
             type=sha,
             type=raw,value=${{ github.event.client_payload.ref }}
 
+            
+      - name: Update Version In Checked-Out Code
+        if: ${{ github.event.client_payload.ref }}
+        run: >
+          sed -i "s@\(.*image:\).*@\1 hub.opensciencegrid.org/usatlas/analysis-dask-base:${{ github.event.client_payload.ref }}@" ${GITHUB_WORKSPACE}/dask_config.yaml;
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.0.0
 
