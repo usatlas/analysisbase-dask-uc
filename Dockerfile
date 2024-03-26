@@ -27,7 +27,11 @@ RUN mkdir /workspace
 COPY private_jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
 COPY dask_config.yaml /etc/dask/dask_config.yaml
-RUN sed -i "s@\(.*image:\).*@\1 hub.opensciencegrid.org/usatlas/analysis-dask-base:${BASE_TAG}@" /etc/dask/dask_config.yaml;
+# Can't reuse value of BASE_IMAGE from FROM as this gets cleared by `docker build`, so just
+# reapply it here (only need to pass --build-arg BASE_TAG=... to docker build once).
+ARG BASE_TAG=latest
+RUN sed -i "s@\(.*image:\).*@\1 hub.opensciencegrid.org/usatlas/analysis-dask-base:${BASE_TAG}@" /etc/dask/dask_config.yaml \
+    && cat /etc/dask/dask_config.yaml
 
 
 RUN . /release_setup.sh \
