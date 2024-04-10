@@ -8,7 +8,7 @@ labextension:
     workers: 3
     adapt:
       minimum: 0
-      maximum: 100
+      maximum: 1000
   initial: []
 
 distributed:
@@ -96,7 +96,7 @@ kubernetes:
               "dask",
               "worker",
               "--nthreads",
-              "2",
+              "1",
               "--memory-limit",
               "8GB",
               "--death-timeout",
