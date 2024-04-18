@@ -95,7 +95,7 @@ kubernetes:
             [
               "dask",
               "worker",
-              "--nprocs",
+              "--nworkers",
               "8",
               "--nthreads",
               "1",
@@ -106,8 +106,8 @@ kubernetes:
             ]
           resources:
             limits:
-              cpu: "6"
+              cpu: "10"
               memory: 20G
             requests:
-              cpu: "4"
+              cpu: "8"
               memory: 10G
