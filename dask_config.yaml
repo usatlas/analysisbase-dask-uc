@@ -96,18 +96,18 @@ kubernetes:
               "dask",
               "worker",
               "--nworkers",
-              "8",
+              "4",
               "--nthreads",
               "1",
               "--memory-limit",
-              "8GB",
+              "4GB",
               "--death-timeout",
               "60",
             ]
           resources:
             limits:
               cpu: "10"
-              memory: 20G
+              memory: 24G
             requests:
               cpu: "8"
-              memory: 10G
+              memory: 17G
