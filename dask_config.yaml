@@ -109,5 +109,5 @@ kubernetes:
               cpu: "10"
               memory: 24G
             requests:
-              cpu: "8"
+              cpu: "5"
               memory: 17G
