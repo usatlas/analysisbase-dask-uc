@@ -23,7 +23,7 @@ kubernetes:
   namespace: af-jupyter
   env: {}
   count:
-    start: 1
+    start: 2
     max: 1000
   image: "ghcr.io/dask/dask:latest"
   resources: {}
@@ -69,6 +69,7 @@ kubernetes:
         - name: dask-scheduler
           # image: ghcr.io/dask/dask:latest
           image: hub.opensciencegrid.org/usatlas/analysis-dask-base:dev
+          imagePullPolicy: Always
           env:
             - name: DASK_BOKEH_PREFIX
               value: "{host}"
@@ -91,6 +92,7 @@ kubernetes:
         - name: dask-worker
           image: hub.opensciencegrid.org/usatlas/analysis-dask-base:dev
           # image: ghcr.io/dask/dask:latest
+          imagePullPolicy: Always
           args:
             [
               "dask",
