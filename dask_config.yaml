@@ -23,8 +23,9 @@ kubernetes:
   namespace: af-jupyter
   env: {}
   count:
-    start: 2
-    max: 1000
+    start: 1
+    min: 1
+    max: 5000
   image: "ghcr.io/dask/dask:latest"
   resources: {}
   scheduler-service-wait-timeout: 30
