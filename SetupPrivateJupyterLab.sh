@@ -5,7 +5,8 @@ echo "------ setting up user"
 
 if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     PATH=$PATH:/usr/sbin
-    /sync_users_debian.sh -u root."$CONNECT_GROUP" -g root."$CONNECT_GROUP" -e https://api.ci-connect.net:18080
+    groupadd $CONNECT_GROUP -g $CONNECT_GID
+    useradd -M -u $OWNER_UID -G $CONNECT_GROUP $OWNER
     # Do not leak some important tokens
     unset API_TOKEN
     # Set the user's $DATA dir
