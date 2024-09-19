@@ -114,3 +114,30 @@ kubernetes:
             requests:
               cpu: "1.5"
               memory: 5G
+          volumeMounts:
+          - mountPath: /home
+            name: nfs-home
+          - mountPath: /data
+            name: ceph-data
+            subPath: data
+          - mountPath: /cvmfs
+            mountPropagation: HostToContainer
+            name: cvmfs
+      volumes:
+      - name: nfs-home
+        nfs:
+          path: /export/home
+          server: nfs.af.uchicago.edu
+      - cephfs:
+          monitors:
+          - 192.170.240.135:6789
+          - 192.170.240.148:6789
+          - 192.170.240.192:6789
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: ceph-data
+      - hostPath:
+          path: /cvmfs
+          type: ""
+        name: cvmfs
