@@ -132,7 +132,7 @@ kubernetes:
           monitors:
           - 192.170.240.135:6789
           - 192.170.240.148:6789
-          - 192.170.240.192:6789
+          - 192.170.241.192:6789
           secretRef:
             name: ceph-secret
           user: admin
