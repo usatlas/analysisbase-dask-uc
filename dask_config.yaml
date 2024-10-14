@@ -103,7 +103,7 @@ kubernetes:
               "--nthreads",
               "1",
               "--memory-limit",
-              "4GB",
+              "3GB",
               "--death-timeout",
               "60",
             ]
@@ -113,7 +113,7 @@ kubernetes:
               memory: 10G
             requests:
               cpu: "1.5"
-              memory: 5G
+              memory: "3.5G"
           volumeMounts:
           - mountPath: /home
             name: nfs-home
