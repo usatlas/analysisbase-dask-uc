@@ -1,0 +1,10 @@
+labextension:
+  factory:
+    module: 'dask_gateway'
+    class: 'GatewayCluster'
+    args: []
+    kwargs:
+      public_address: 'https://jupyterhub.af.uchicago.edu/services/dask-gateway/'
+      address: 'http://traefik-dask-gateway.dask-gateway/services/dask-gateway/'
+      auth: 'jupyterhub'
+      image: hub.opensciencegrid.org/usatlas/analysis-dask-base:
