@@ -13,6 +13,8 @@ from dask.utils import format_bytes
 from dask.distributed import Adaptive
 from tornado.ioloop import IOLoop
 from tornado.concurrent import Future
+from dask_gateway import Gateway
+
 
 # A type for a dask cluster model: a serializable
 # representation of information about the cluster.
@@ -63,9 +65,26 @@ class DaskClusterManager:
 
         self.initialized = Future()
 
+        async def _load_clusters():
+            """Load existing clusters"""
+            #module = importlib.import_module(dask.config.get("labextension.factory.module"))
+            #Cluster = getattr(module, dask.config.get("labextension.factory.class"))
+        
+            kwargs = dask.config.get("labextension.factory.kwargs")
+            kwargs = {key.replace("-", "_"): kwargs[key] for key in kwargs.keys() & {"address","public_address","auth"}}
+            if dask.config.get("labextension.factory.class") == 'GatewayCluster':
+                self.gateway = Gateway(**kwargs, asynchronous=True)
+                clusters = await self.gateway.list_clusters()
+                for c in clusters:
+                    print(f"cluster: {c.name}")
+                    await self._load_cluster(name=c.name)
+
         async def start_clusters():
             for model in dask.config.get("labextension.initial"):
                 await self.start_cluster(configuration=model)
+
+            await _load_clusters()
+
             self.initialized.set_result(self)
 
         IOLoop.current().add_callback(start_clusters)
@@ -97,6 +116,45 @@ class DaskClusterManager:
             cluster_name = f"{cluster_type} {self._n_clusters}"
         else:
             cluster_name = configuration["name"]
+
+        # Check if the cluster was started adaptively
+        if adaptive:
+            self._adaptives[cluster_id] = adaptive
+
+        self._clusters[cluster_id] = cluster
+        self._cluster_names[cluster_id] = cluster_name
+        return make_cluster_model(cluster_id, cluster_name, cluster, adaptive=adaptive)
+
+    async def _load_cluster(
+        self, cluster_id: str = "", name: str = ""
+    ) -> ClusterModel:
+        """
+        Load a existing Dask cluster.
+
+        Parameters
+        ----------
+        cluster_id : string
+            An optional string id for the cluster. If not given, a random id
+            will be chosen.
+
+        Returns
+        cluster_model : a dask cluster model.
+        """
+        if not cluster_id:
+            cluster_id = str(uuid4())
+
+        cluster = await self.gateway.connect(name, shutdown_on_close=True)
+        info = cluster.scheduler_info
+        cores = sum(d["nthreads"] for d in info["workers"].values())
+        print(f"cores:{cores}")
+
+        adaptive = None
+
+        self._n_clusters += 1
+
+        # 
+        cluster_type = type(cluster).__name__
+        cluster_name = f"{cluster_type} {self._n_clusters}"
 
         # Check if the cluster was started adaptively
         if adaptive:
