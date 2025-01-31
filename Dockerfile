@@ -29,9 +29,9 @@ COPY private_jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.p
 COPY labextension.yaml /etc/dask/labextension.yaml
 # Can't reuse value of BASE_IMAGE from FROM as this gets cleared by `docker build`, so just
 # reapply it here (only need to pass --build-arg BASE_TAG=... to docker build once).
-ARG BASE_TAG=latest
-RUN sed -i "s@\(.*image:\).*@\1 hub.opensciencegrid.org/usatlas/analysis-dask-base:${BASE_TAG}@" /etc/dask/labextension.yaml \
-    && cat /etc/dask/labextension.yaml
+#ARG BASE_TAG=latest
+#RUN sed -i "s@\(.*image:\).*@\1 hub.opensciencegrid.org/usatlas/analysis-dask-base:${BASE_TAG}@" /etc/dask/labextension.yaml \
+#    && cat /etc/dask/labextension.yaml
 
 COPY  11.92ba9866db6ad7a7f70f.js /venv/share/jupyter/labextensions/dask-labextension/static/11.92ba9866db6ad7a7f70f.js
 COPY  manager.py /venv/lib/python3.11/site-packages/dask_labextension/manager.py
