@@ -19,14 +19,16 @@ if [ "$OWNER" != "" ] && [ "$CONNECT_GROUP" != "" ]; then
     cd /home/$OWNER
 
     chown -R  $OWNER: /venv
-    
+    # Install https://github.com/astral-sh/uv for users editing environment later
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+
     unset JUPYTER_PATH
     which jupyter
     unset JUPYTER_CONFIG_DIR
     ls /root/.jupyter/jupyter_notebook_config.py
     cd /home/$OWNER
-    
+
     # Invoke Jupyter lab as the user
     su $OWNER -c "jupyter lab --ServerApp.root_dir=/home/${OWNER} --ServerApp.port=9999 --ServerApp.ip='0.0.0.0' --no-browser --config=/root/.jupyter/jupyter_notebook_config.py"
 
-fi 
+fi
