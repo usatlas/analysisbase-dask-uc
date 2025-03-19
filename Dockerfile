@@ -28,6 +28,7 @@ RUN mkdir /workspace
 COPY private_jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
 COPY labextension.yaml /etc/dask/labextension.yaml
+COPY gateway.yaml /etc/dask/gateway.yaml
 # Can't reuse value of BASE_IMAGE from FROM as this gets cleared by `docker build`, so just
 # reapply it here (only need to pass --build-arg BASE_TAG=... to docker build once).
 #ARG BASE_TAG=latest
