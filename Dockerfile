@@ -1,6 +1,6 @@
 ARG BASE_TAG=latest
-#FROM sslhep/analysis-dask-base:${BASE_TAG}
-FROM hub.opensciencegrid.org/usatlas/analysis-dask-gateway:a5 
+FROM sslhep/analysis-dask-base:${BASE_TAG}
+#FROM hub.opensciencegrid.org/usatlas/analysis-dask-gateway:a5 
 
 LABEL maintainer Ilija Vukotic <ivukotic@cern.ch>
 
@@ -36,7 +36,7 @@ COPY gateway.yaml /etc/dask/gateway.yaml
 #    && cat /etc/dask/labextension.yaml
 
 COPY  11.92ba9866db6ad7a7f70f.js /venv/share/jupyter/labextensions/dask-labextension/static/11.92ba9866db6ad7a7f70f.js
-COPY  manager.py /venv/lib/python3.11/site-packages/dask_labextension/manager.py
+COPY  manager.py /venv/lib/python3.9/site-packages/dask_labextension/manager.py
 
 
 RUN . /release_setup.sh \
