@@ -1,0 +1,6 @@
+gateway:
+  public_address: 'https://jupyterhub.af.uchicago.edu/services/dask-gateway/'
+  address: 'http://traefik-dask-gateway.dask-gateway/services/dask-gateway/'
+  proxy_address: 'gateway://traefik-dask-gateway.dask-gateway:80'
+  auth: 
+    type: 'jupyterhub'
