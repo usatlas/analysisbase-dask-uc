@@ -1,6 +1,6 @@
-ARG BASE_TAG=latest
+ARG BASE_TAG=main
 #FROM sslhep/analysis-dask-base:${BASE_TAG}
-FROM hub.opensciencegrid.org/usatlas/analysis-dask-gateway:a5 
+FROM hub.opensciencegrid.org/usatlas/analysis-dask-base:${BASE_TAG}
 
 LABEL maintainer Ilija Vukotic <ivukotic@cern.ch>
 

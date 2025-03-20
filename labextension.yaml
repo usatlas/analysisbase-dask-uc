@@ -7,4 +7,4 @@ labextension:
       public_address: 'https://jupyterhub.af.uchicago.edu/services/dask-gateway/'
       address: 'http://traefik-dask-gateway.dask-gateway/services/dask-gateway/'
       auth: 'jupyterhub'
-      image: 'hub.opensciencegrid.org/usatlas/analysis-dask-gateway:a5'
+      image: 'hub.opensciencegrid.org/usatlas/analysis-dask-base:main'
