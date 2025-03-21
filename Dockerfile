@@ -1,4 +1,4 @@
-ARG BASE_TAG=main
+ARG BASE_TAG=dev
 #FROM sslhep/analysis-dask-base:${BASE_TAG}
 FROM hub.opensciencegrid.org/usatlas/analysis-dask-base:${BASE_TAG}
 
