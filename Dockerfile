@@ -37,6 +37,7 @@ COPY gateway.yaml /etc/dask/gateway.yaml
 
 COPY  11.92ba9866db6ad7a7f70f.js /venv/share/jupyter/labextensions/dask-labextension/static/11.92ba9866db6ad7a7f70f.js
 COPY  manager.py /venv/lib/python3.9/site-packages/dask_labextension/manager.py
+COPY  clusterhandler.py /venv/lib/python3.9/site-packages/dask_labextension/clusterhandler.py
 
 
 RUN . /release_setup.sh \
