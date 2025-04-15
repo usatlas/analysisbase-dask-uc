@@ -49,4 +49,6 @@ RUN echo -e '\n# Activate AnalysisBase environment on login shell\n. /release_se
 
 # CMD given to container at runtime at UChicago Analysis Facility:
 # "/.run /ML_platform_tests/SetupPrivateJupyterLab.sh"
+
 CMD ["/.run"]
+# ENTRYPOINT [ "/.run" ]
