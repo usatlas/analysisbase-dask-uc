@@ -28,6 +28,35 @@ class Adaptive:
         self.minimum = minimum
         self.maximum = maximum
 
+
+import os
+
+def save_tls_credentials(cluster):
+    """
+    Saves the TLS certificate and key of a Dask-Gateway cluster object to files
+    in the user's ~/.config/dask/tls directory with proper extensions.
+
+    Args:
+        cluster: A Dask-Gateway cluster object with `tls_cert`, `tls_key`, and `name` attributes.
+    """
+    config_dir = os.path.join(os.path.expanduser("~"), ".config", "dask", "tls")
+    os.makedirs(config_dir, exist_ok=True)
+
+    cert_path = os.path.join(config_dir, f"{cluster.name}.pem")
+    key_path = os.path.join(config_dir, f"{cluster.name}.key")
+
+    os.makedirs(os.path.dirname(cert_path), exist_ok=True)
+    os.makedirs(os.path.dirname(key_path), exist_ok=True)
+
+    with open(cert_path, "w") as cert_file:
+        cert_file.write(cluster.tls_cert)
+
+    with open(key_path, "w") as key_file:
+        key_file.write(cluster.tls_key)
+
+    print(f"Saved TLS cert to {cert_path}")
+    print(f"Saved TLS key to {key_path}")
+
 async def make_cluster(configuration: dict) -> Cluster:
     module = importlib.import_module(dask.config.get("labextension.factory.module"))
     Cluster = getattr(module, dask.config.get("labextension.factory.class"))
@@ -38,6 +67,7 @@ async def make_cluster(configuration: dict) -> Cluster:
     cluster = await Cluster(
         *dask.config.get("labextension.factory.args"), **kwargs, asynchronous=True
     )
+
 
     configuration = dask.config.merge(
         dask.config.get("labextension.default"), configuration
@@ -118,6 +148,7 @@ class DaskClusterManager:
         cluster, adaptive = await make_cluster(configuration)
         self._n_clusters += 1
 
+
         # Check for a name in the config
         if not configuration.get("name"):
             cluster_type = type(cluster).__name__
@@ -128,6 +159,8 @@ class DaskClusterManager:
         # Check if the cluster was started adaptively
         if adaptive:
             self._adaptives[cluster_id] = adaptive
+
+        save_tls_credentials(await self.gateway.get_cluster(cluster.name))
 
         self._clusters[cluster_id] = cluster
         self._cluster_names[cluster_id] = cluster_name
