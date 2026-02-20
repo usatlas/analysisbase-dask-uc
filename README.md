@@ -16,3 +16,12 @@ When [configuring](https://af.uchicago.edu/jupyterlab/configure) the Jupyter Lab
 ```
 docker pull sslhep/analysis-dask-uc:latest
 ```
+
+## Container Layout
+
+The container is designed to be launched by the UChicago Analysis Facility JupyterHub service:
+
+- **Startup Script**: `SetupPrivateJupyterLab.sh` is installed at `/usr/local/bin/SetupPrivateJupyterLab.sh`
+- **Entrypoint**: The container entrypoint `/.run` executes any arguments passed to it
+- **Runtime Invocation**: The AF portal invokes the container with `/.run /usr/local/bin/SetupPrivateJupyterLab.sh`
+- **Startup Process**: The script creates a user account, configures the environment, and launches JupyterLab on port 9999
