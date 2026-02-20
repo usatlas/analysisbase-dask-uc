@@ -18,8 +18,8 @@ RUN cp /usr/share/bash-completion/completions/git  /etc/profile.d/git.sh
 COPY run.sh  /.run
 RUN chmod +x /.run
 
-COPY SetupPrivateJupyterLab.sh /ML_platform_tests/SetupPrivateJupyterLab.sh
-RUN chmod +x /ML_platform_tests/SetupPrivateJupyterLab.sh
+COPY SetupPrivateJupyterLab.sh /usr/local/bin/SetupPrivateJupyterLab.sh
+RUN chmod +x /usr/local/bin/SetupPrivateJupyterLab.sh
 
 RUN mkdir /workspace
 # Want this to go to $(jupyter --config-dir) which is /root/.jupyter for this container
@@ -43,7 +43,7 @@ RUN . /release_setup.sh \
 RUN echo -e '\n# Activate AnalysisBase environment on login shell\n. /release_setup.sh\n' >> /root/.bash_profile
 
 # CMD given to container at runtime at UChicago Analysis Facility:
-# "/.run /ML_platform_tests/SetupPrivateJupyterLab.sh"
+# "/.run /usr/local/bin/SetupPrivateJupyterLab.sh"
 
 CMD ["/.run"]
 # ENTRYPOINT [ "/.run" ]
