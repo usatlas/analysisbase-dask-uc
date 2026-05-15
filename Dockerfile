@@ -37,6 +37,13 @@ RUN sed -i "s@\(.*image:\).*@\1 hub.opensciencegrid.org/usatlas/analysis-dask-ba
 RUN . /release_setup.sh \
     && /venv/bin/jupyter server extension enable --py jupyterlab --sys-prefix
 
+RUN . /release_setup.sh \
+    && /venv/bin/pip install --no-cache-dir \
+        "jupyter-mcp-server>=1.0.0" \
+        "jupyter-collaboration" \
+        pycrdt \
+    && /venv/bin/jupyter server extension enable --py jupyter_mcp_server --sys-prefix
+
 # RUN git clone https://github.com/ivukotic/ML_platform_tests.git /ML_platform_tests
 
 # Have Jupyter shell setup AnalysisBase environment by default

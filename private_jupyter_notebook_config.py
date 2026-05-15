@@ -6,3 +6,4 @@ c.NotebookApp.open_browser = False
 # Set shell to bash as AnalysisBase assumes it
 # force login shell to pickup ~/.bash_profile
 c.NotebookApp.terminado_settings = {"shell_command": ["/bin/bash", "-l"]}
+c.ServerApp.jpserver_extensions = {"jupyter_mcp_server": True}

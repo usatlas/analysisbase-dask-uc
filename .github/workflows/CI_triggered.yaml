@@ -4,6 +4,12 @@ name: Build on trigger
 on:
   repository_dispatch:
     types: gitops-analysis-base-trigger
+  workflow_dispatch:
+    inputs:
+      base_tag:
+        description: "Base image tag to build against (e.g. 24.2.26)"
+        required: true
+        default: "24.2.26"
 
 jobs:
   docker:
@@ -11,6 +17,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5.0.0
+
+      - name: Resolve base tag
+        id: base_tag
+        run: echo "value=${{ github.event.client_payload.ref || github.event.inputs.base_tag }}" >> $GITHUB_OUTPUT
 
       - name: Docker meta
         id: meta
@@ -21,7 +31,7 @@ jobs:
             hub.opensciencegrid.org/usatlas/analysis-dask-uc
           tags: |
             type=sha,
-            type=raw,value=${{ github.event.client_payload.ref }}
+            type=raw,value=${{ steps.base_tag.outputs.value }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.6.0
@@ -48,7 +58,7 @@ jobs:
           context: .
           file: Dockerfile
           build-args: |
-            BASE_TAG=${{ github.event.client_payload.ref }}
+            BASE_TAG=${{ steps.base_tag.outputs.value }}
           load: true
           push: false
           tags: ${{ steps.meta.outputs.tags }}
@@ -60,7 +70,7 @@ jobs:
           context: .
           file: Dockerfile
           build-args: |
-            BASE_TAG=${{ github.event.client_payload.ref }}
+            BASE_TAG=${{ steps.base_tag.outputs.value }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
