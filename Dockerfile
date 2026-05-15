@@ -7,7 +7,7 @@ SHELL [ "/bin/bash", "-c" ]
 
 USER root
 
-RUN yum install -y jq
+RUN yum update -y && yum install -y jq
 
 RUN echo "Timestamp:" `date --utc` | tee /image-build-info.txt
 
