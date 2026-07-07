@@ -10,6 +10,14 @@ USER root
 
 RUN yum install -y jq
 
+# Install JupyterHub into the venv so the image ships `jupyterhub-singleuser`.
+# BinderHub / JupyterHub spawns the notebook server via `jupyterhub-singleuser`,
+# which handles OAuth against the hub. Keep the version compatible with the hub
+# (JupyterHub is backward/forward compatible within the same major version).
+RUN . /release_setup.sh \
+    && /venv/bin/pip install --no-cache-dir "jupyterhub" \
+    && /venv/bin/jupyterhub-singleuser --version
+
 RUN echo "Timestamp:" `date --utc` | tee /image-build-info.txt
 
 #RUN curl -L https://raw.githubusercontent.com/maniaclab/ci-connect-api/master/resources/provisioner/sync_users_debian.sh --output /sync_users_debian.sh
