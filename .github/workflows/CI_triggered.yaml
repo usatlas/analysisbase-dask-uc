@@ -11,16 +11,30 @@ on:
         required: true
         default: "24.2.26"
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   docker:
+    name: docker
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # actions/checkout
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Resolve base tag
         id: base_tag
-        run: echo "value=${{ github.event.client_payload.ref || github.event.inputs.base_tag }}" >> $GITHUB_OUTPUT
+        env:
+          DISPATCH_REF: ${{ github.event.client_payload.ref }}
+          DISPATCH_INPUT: ${{ github.event.inputs.base_tag }}
+        run: echo "value=${DISPATCH_REF:-$DISPATCH_INPUT}" >> "$GITHUB_OUTPUT"
 
       - name: Docker meta
         id: meta
